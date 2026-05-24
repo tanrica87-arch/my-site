@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>𝐋𝐨𝐫𝐞𝐱 𝐒𝐡𝐨𝐩</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6a11cb;
+            --secondary: #2575fc;
+            --accent: #00c6ff;
+            --dark: #0a0a1a;
+            --darker: #050510;
+            --light: #f0f0f0;
+            --gray: #8a8a9c;
+            --card-bg: rgba(20, 20, 35, 0.85);
+            --card-border: rgba(106, 17, 203, 0.4);
+            --success: #00d26a;
+            --matrix: #00ff41;
+            --hacker-bg: #000;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: var(--hacker-bg);
+            color: var(--light);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        .code-flow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        
+        .code-line {
+            position: absolute;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: var(--matrix);
+            text-shadow: 0 0 5px var(--matrix);
+            white-space: nowrap;
+            animation: fall linear infinite;
+        }
+        
+        @keyframes fall {
+            from {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            to {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .theme-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+        
+        .theme-btn {
+            background: rgba(20, 20, 35, 0.8);
+            border: 1px solid var(--card-border);
+            color: var(--light);
+            padding: 10px 15px;
+            border-radius: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            z-index: 100;
+        }
+        
+        .theme-btn:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.4);
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .logo-text {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 20px rgba(106, 17, 203, 0.5);
+            letter-spacing: 2px;
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--gray);
+            margin-bottom: 25px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .tagline {
+            display: inline-block;
+            background: rgba(106, 17, 203, 0.2);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--accent);
+            border: 1px solid rgba(106, 17, 203, 0.3);
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--card-border);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+            border-color: rgba(106, 17, 203, 0.7);
+        }
+        
+        .product-name {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--light);
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .product-name::after {
+            content: '+';
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .product-card.active .product-name::after {
+            transform: rotate(45deg);
+        }
+        
+        .product-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 20px 0;
+            color: var(--success);
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        
+        .product-features {
+            margin: 15px 0;
+            flex-grow: 1;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+        
+        .product-card.active .product-features {
+            max-height: 500px;
+        }
+        
+        .product-features li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            color: var(--gray);
+        }
+        
+        .product-features i {
+            margin-right: 10px;
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+        
+        .product-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 0 15px;
+            margin-top: 10px;
+        }
+        
+        .product-card.active .product-details {
+            max-height: 500px;
+            padding: 15px;
+        }
+        
+        .product-details p {
+            margin-bottom: 10px;
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+        
+        .buy-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 14px 25px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-top: auto;
+            box-shadow: 0 4px 15px rgba(106, 17, 203, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .buy-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .buy-button:hover::before {
+            left: 100%;
+        }
+        
+        .buy-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(106, 17, 203, 0.6);
+        }
+        
+        .buy-button i {
+            margin-left: 8px;
+            font-size: 1rem;
+        }
+        
+        .discount-badge {
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            background: linear-gradient(to right, var(--accent), var(--secondary));
+            color: white;
+            padding: 5px 35px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transform: rotate(45deg);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 70px;
+            padding: 30px 20px;
+            color: var(--gray);
+            font-size: 0.95rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(15, 15, 35, 0.5);
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(106, 17, 203, 0.2);
+            color: var(--accent);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(106, 17, 203, 0.3);
+            font-size: 1.2rem;
+        }
+        
+        .social-links a:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .tg-only {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        
+        .tg-only a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(106, 17, 203, 0.4);
+        }
+        
+        .tg-only a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(106, 17, 203, 0.6);
+        }
+        
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+            
+            .logo-text {
+                font-size: 3rem;
+            }
+            
+            .theme-switcher {
+                top: 10px;
+                right: 10px;
+            }
+            
+            .theme-btn {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .product-card {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        .product-card:nth-child(2) { animation-delay: 0.1s; }
+        .product-card:nth-child(3) { animation-delay: 0.2s; }
+        .product-card:nth-child(4) { animation-delay: 0.3s; }
+        .product-card:nth-child(5) { animation-delay: 0.4s; }
+        .product-card:nth-child(6) { animation-delay: 0.5s; }
+        .product-card:nth-child(7) { animation-delay: 0.6s; }
+        .product-card:nth-child(8) { animation-delay: 0.7s; }
+        .product-card:nth-child(9) { animation-delay: 0.8s; }
+        .product-card:nth-child(10) { animation-delay: 0.9s; }
+        .product-card:nth-child(11) { animation-delay: 1s; }
+        .product-card:nth-child(12) { animation-delay: 1.1s; }
+        .product-card:nth-child(13) { animation-delay: 1.2s; }
+    </style>
+</head>
+<body>
+    <div class="code-flow" id="codeFlow"></div>
+    
+    <div class="theme-switcher">
+        <button class="theme-btn" id="themeToggle">
+            <i class="fas fa-palette"></i>
+            <span>Tema Değiştir</span>
+        </button>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1 class="logo-text">𝐋𝐨𝐫𝐞𝐱 𝐒𝐡𝐨𝐩</h1>
+            <div class="tagline">
+                <i class="fas fa-star"></i> Güvenilir & Kaliteli Hizmet <i class="fas fa-star"></i>
+            </div>
+        </header>
+        
+        <div class="products-grid">
+            <div class="product-card">
+                <div class="product-name">500k PUBG Mobil Combo</div>
+                <div class="product-price">230₺</div>
+                <ul class="product-features">
+                    <li><i class="fas fa-check"></i> 500.000+ veri içerir</li>
+                    <li><i class="fas fa-check"></i> Güncel hesaplar</li>
+                    <li><i class="fas fa-check"></i> Türk ve global hesaplar</li>
+                </ul>
+                <div class="product-details">
+                    <p>Bu combo, PUBG Mobile oyunu için 500.000'den fazla hesap bilgisi içermektedir. Türk ve global hesapların karışımından oluşur. Tüm hesaplar güncel ve test edilmiştir.</p>
+                    <p>Kullanımı kolay arayüz ile istediğiniz filtrelemeleri yapabilirsiniz.</p>
+                </div>
+                <a href="https://t.me/infazsiz" class="buy-button" target="_blank">
+                    Satın Al <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <div class="product-card">
+                <div class="product-name">Instagram Düşük Takipçili Tool</div>
+                <div class="product-price">150₺</div>
+                <ul class="product-features">
+                    <li><i class="fas fa-check"></i> Düşük takipçili hesaplar</li>
+                    <li><i class="fas fa-check"></i> Hızlı işlem</li>
+                    <li><i class="fas fa-check"></i> Güncel yöntemler</li>
+                </ul>
+                <div class="product-details">
+                    <p>Düşük takipçili Instagram hesaplarına erişim sağlayan özel bir araç. Hesaplar 0-500 takipçi aralığındadır.</p>
+                    <p>Güncel güvenlik önlemlerini aşabilen yöntemler kullanılarak geliştirilmiştir.</p>
+                </div>
+                <a href="https://t.me/infazsiz" class="buy-button" target="_blank">
+                    Satın Al <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <div class="product-card">
+                <div class="product-name">Instagram +100 Takipçili Tool</div>
+                <div class="product-price">300₺</div>
+                <ul class="product-features">
+                    <li><i class="fas fa-check"></i> 100+ takipçili hesaplar</li>
+                    <li><i class="fas fa-check"></i> Kaliteli veritabanı</li>
+                    <li><i class="fas fa-check"></i> Düzenli güncelleme</li>
+                </ul>
+                <div class="product-details">
+                    <p>100 ve üzeri takipçisi olan Instagram hesaplarına erişim sağlar. Özenle seçilmiş, aktif hesaplardan oluşur.</p>
+                    <p>Veritabanı haftalık olarak güncellenmekte ve yeni hesaplar eklenmektedir.</p>
+                                    <div class="discount-badge">VIP</div>
+                </div>
+                <a href="https://t.me/infazsiz" class="buy-button" target="_blank">
+                    Satın Al <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <div class="product-card">
+                <div class="product-name">TikTok Tool</div>
+                <div class="product-price">300₺</div>
+                <ul class="product-features">
+                    <li><i class="fas fa-check"></i> TikTok hesapları</li>
+                    <li><i class="fas fa-check"></i> Popüler içerikler</li>
+                    <li><i class="fas fa-check"></i> Güncel veriler</li>
+                </ul>
+                <div class="product-details">
+                    <p>TikTok platformu için geliştirilmiş kapsamlı bir araç. Popüler hesaplara, trend içeriklere ve analiz araçlarına erişim sağlar.</p>
+                    <p>Video indirme, hesap analizi ve daha birçok özellik içerir.</p>
+                                    <div class="discount-badge">VIP</div>
+                </div>
+                <a href="https://t.me/infazsiz" class="buy-button" target="_blank">
+                    Satın Al <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <div class="product-card">
+                <div class="product-name">Instagram Meta Tool</div>
+                <div class="product-price">400₺</div>
+                <ul class="product-features">
+                    <li><i class="fas fa-check"></i> Meta verileri</li>
+                    <li><i class="fas fa-check"></i> Gelişmiş filtreleme</li>
+                    <li><i class="fas fa-check"></i> Detaylı analiz</li>
+                </ul>
+                <div class="product-details">
+                    <p>Instagram'ın meta verilerine erişim sağlayan gelişmiş bir araç. Kullanıcıların gizli verilerine, etkileşim istatistiklerine ve davranış analizlerine ulaşmanızı sağlar.</p>
+                    <p>Reklam hedefleme ve pazarlama stratejileri için idealdir.</p>
+                </div>
+                                <div class="discount-badge">VIP</div>
+                <a href="https://t.me/infazsiz" class="buy-button" target="_blank">
+                    Satın Al <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <div class="product-card">
+                <div class="product-name">SMS Bomber Tool</div>
+                <div class="product-price">100₺</div>
+                <ul class="product-features">
+                    <li><i class="fas fa-check"></i> Hızlı SMS gönderimi</li>
+                    <li><i class="fas fa-check"></i> Çoklu numara desteği</li>
+                    <li><i class="fas fa-check"></i> Özelleştirilebilir</li>
+                </ul>
+                <div class="product-details">
+                    <p>Belirtilen telefon numaralarına toplu SMS gönderme aracı. Özelleştirilebilir mesaj içeriği ve gönderim zamanlaması özelliklerine sahiptir.</p>
+                    <p>Farklı operatörler için optimize edilmiş gönderim seçenekleri içerir.</p>
+                </div>
+                <a href="https://t.me/infazsiz" class="buy-button" target="_blank">
+                    Satın Al <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <div class="product-card">
+                <div class="discount-badge">VIP</div>
+                <div class="product-name">Instagram [2010-2011] Tool</div>
+                <div class="product-price">700₺</div>
+                <ul class="product-features">
+                    <li><i class="fas fa-check"></i> 2010-2011 hesapları</li>
+                    <li><i class="fas fa-check"></i> Koleksiyon değeri</li>
+                    <li><i class="fas fa-check"></i> Premium paket</li>
+                </ul>
+                <div class="product-details">
+                    <p>Instagram'ın erken dönemlerine ait (2010-2011) nadir hesaplara erişim sağlayan premium bir araç. Bu hesaplar yüksek koleksiyon değerine sahiptir.</p>
+                    <p>Kısa kullanıcı adlı, eski ve değerli hesaplar içerir. Sınırlı sayıda mevcuttur.</p>
+                </div>
+                <a href="https://t.me/infazsiz" class="buy-button" target="_blank">
+                    Satın Al <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+        
+        <footer>
+      
+            <p>Lorex Shop &copy; 2025 - Tüm hakları saklıdır.</p>
+            <p>Satın almak için "Satın Al" butonuna tıklayarak Telegram üzerinden iletişime geçebilirsiniz.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            document.body.classList.toggle('matrix-theme');
+            
+            if (document.body.classList.contains('matrix-theme')) {
+                this.innerHTML = '<i class="fas fa-sun"></i><span>Normal Tema</span>';
+                startCodeFlow();
+            } else {
+                this.innerHTML = '<i class="fas fa-moon"></i><span>Hacker Tema</span>';
+                stopCodeFlow();
+            }
+        });
+        
+        let codeFlowInterval;
+        
+        function startCodeFlow() {
+            const codeFlow = document.getElementById('codeFlow');
+            codeFlow.innerHTML = '';
+            
+            const codeSnippets = [
+                "root@lorex:~# accessing_system...",
+                "const data = extractUserInfo(target);",
+                "for (let i = 0; i < targets.length; i++) {",
+                "encryption_key = generateRandomBytes(256);",
+                "sudo bypass_security --level=5",
+                "database.connect('instagram_users');",
+                "payload.inject(metadata_collector);",
+                "if (response.status === 200) {",
+                "decrypt(encrypted_data, private_key);",
+                "brute_force --threads=50 --target=instagram",
+                "server.listen(port, () => {",
+                "const token = auth.getAccessToken();",
+                "api.request('/users/search', params);",
+                "session.hijack(cookie_string);",
+                "export default class HackerTool {",
+                "mysql> SELECT * FROM users WHERE id=1;",
+                "python3 exploit.py --target 192.168.1.1",
+                "npm run build --production",
+                "git clone https://github.com/lorex/tools",
+                "docker-compose up --build",
+                "ssh root@lorex.shop -p 2222",
+                "wget https://lorex.shop/tool.zip",
+                "chmod +x installer.sh",
+                "./installer.sh --silent",
+                "echo 'Installation complete!'"
+            ];
+            
+            codeFlowInterval = setInterval(() => {
+                const codeLine = document.createElement('div');
+                codeLine.className = 'code-line';
+                codeLine.textContent = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
+                codeLine.style.left = Math.random() * 100 + 'vw';
+                codeLine.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                codeLine.style.fontSize = (Math.random() * 4 + 12) + 'px';
+                codeLine.style.opacity = Math.random() * 0.5 + 0.5;
+                
+                codeFlow.appendChild(codeLine);
+                
+                setTimeout(() => {
+                    if (codeLine.parentNode) {
+                        codeLine.parentNode.removeChild(codeLine);
+                    }
+                }, 20000);
+            }, 300);
+        }
+        
+        function stopCodeFlow() {
+            clearInterval(codeFlowInterval);
+            document.getElementById('codeFlow').innerHTML = '';
+        }
+        
+        document.querySelectorAll('.product-name').forEach(name => {
+            name.addEventListener('click', function() {
+                const card = this.closest('.product-card');
+                card.classList.toggle('active');
+            });
+        });
+        
+        window.addEventListener('load', function() {
+            startCodeFlow();
+        });
+    </script>
+</body>
+</html>
